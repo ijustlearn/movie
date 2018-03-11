@@ -23,10 +23,13 @@ class Dy2018MovieScrapy(scrapy.Spider):
         for otherlink in otherlinkList:
             isNextPage = otherlink.css('::text').extract_first()=='下一页'
             if isNextPage:
-                yield Request(self.baseUrl+otherlink.css('::attr(href)').extract_first(), callback=self.parse1)
+                yield Request(self.baseUrl+otherlink.css('::attr(href)').extract_first(), callback=self.parse0)
 
     def parse1(self, response):
-        infos = response.css("#Zoom>p")
+        infos = response.css("#Zoom>p") #电影描述列表
+        downAdrressesUrl = response.css("#Zoom>table") #电影下载地址元素列表
+        if len(infos) == 0 or len(infos) == downAdrressesUrl : #如果获取不到相应的元素则直接退出
+            return
         movieItem = ProMovieItem()
         movieId =  CommoneUtils.getTableId()
         movieItem['id'] = movieId
@@ -52,8 +55,12 @@ class Dy2018MovieScrapy(scrapy.Spider):
                 movieDescr = movieDescr + p
             if re.match('◎简　　介', p):
                 beginDescr = True
+        if not movieItem.get('movieName', None) or not movieItem.get('movieRealName', None):
+            return
+        if len(movieDescr)>2000 : #如果描述太长则直接截断
+            movieDescr = movieDescr[0:1999]
         movieItem['movieDescr']=movieDescr
-        downAdrressesUrl = response.css("#Zoom>table")
+        yield movieItem
         for downAdrressUrlInfo in downAdrressesUrl:
             downAdrressItem = ProMovieDownAddressItem()
             url = downAdrressUrlInfo.css('a::attr(href)').extract_first()
@@ -63,5 +70,5 @@ class Dy2018MovieScrapy(scrapy.Spider):
             downAdrressItem['movieId'] = movieId
             downAdrressItem['downAddress'] = url
             yield downAdrressItem
-        yield movieItem
+
 
