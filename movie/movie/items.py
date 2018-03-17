@@ -20,6 +20,7 @@ class ProMovieItem(scrapy.Item):
     enable = scrapy.Field() #是否启用
     source = scrapy.Field() #是否启用
     sourcePageUrl = scrapy.Field() #是否启用
+    updateDate = scrapy.Field() #更新日期
 
 
 class ProMovieDownAddressItem(scrapy.Item):
