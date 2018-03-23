@@ -15,8 +15,8 @@ class piaohuaMovieScrapy(scrapy.Spider):
     baseUrl = "https://www.piaohua.com"
     allowed_domains  = ["piaohua.com"]
     is_inc = 'true'
-    #scrapy_date = datetime.datetime.now()  # 从哪天抓取数据默认当天
-    scrapy_date = datetime.datetime.strptime('2018-03-10', '%Y-%m-%d')
+    scrapy_date = datetime.datetime.now()  # 从哪天抓取数据默认当天
+    # scrapy_date = datetime.datetime.strptime('2018-03-10', '%Y-%m-%d')
     def __init__(self,is_inc='true' ,*args,**kwargs):
         super(piaohuaMovieScrapy, self).__init__(*args, **kwargs)
         self.is_inc = is_inc
