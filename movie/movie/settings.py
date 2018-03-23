@@ -98,3 +98,8 @@ MYSQL_PASSWORD = 'root'
 IS_INC = True
 
 #DUPEFILTER_CLASS  = 'movie.utils.seenURLFilter.SeenURLFilter'
+
+MAIL_FROM = '477915244@qq.com'
+MAIL_HOST = 'smtp.qq.com'
+MAIL_USER = '477915244@qq.com'
+MAIL_PASS = 'dhfvuaizjcocbjdb'

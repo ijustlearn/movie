@@ -1,5 +1,7 @@
 import datetime
 import re
+
+from scrapy.crawler import Crawler
 from scrapy import  log
 import scrapy
 from scrapy import Request
@@ -7,8 +9,7 @@ from scrapy import Request
 from movie.items import ProMovieItem, ProMovieDownAddressItem
 from movie.mysql.pipelines import MoviePipeline
 from movie.utils.commoneUtils import CommoneUtils
-
-
+from scrapy.mail import MailSender
 class piaohuaMovieScrapy(scrapy.Spider):
     name = 'piaohua'
     baseUrl = "https://www.piaohua.com"
@@ -23,7 +24,17 @@ class piaohuaMovieScrapy(scrapy.Spider):
             print("全量抓取电影")
         else:
             print("增量抓取电影")
+    def closed(self,reason):
+        #爬取完成后进行邮件通知
+        mailer = MailSender.from_settings(self.settings)
+        body = '''本次爬取状态:{}\r\n本次爬取电影数量:{}\r\n本次爬取电影列表:{}'''.format(reason,self.crawler.stats.get_value('movie_count'),
+                                                                    self.crawler.stats.get_value('movie_list'))
+        subject = '雪花网电影爬取通知'
+        mailer.send(to=["477915244@qq.com"], subject=subject, body=body)
+
     def start_requests(self):
+        self.crawler.stats.set_value('movie_list', [])
+        self.crawler.stats.set_value('movie_count', 0)
         yield Request("https://www.piaohua.com/html/zuixindianying.html", callback=self.parse0)
         if self.is_inc == 'false':
             yield Request("https://www.piaohua.com/html/dongzuo/index.html", callback=self.parse2)
@@ -105,6 +116,8 @@ class piaohuaMovieScrapy(scrapy.Spider):
         #如果已经有当前页面的电影链接存储过则直接退出
         if moviePipelin.movieLinkIsRepeat(movieItem['sourcePageUrl'],movieItem['source']):
             return
+        self.crawler.stats.inc_value('movie_count')
+        self.crawler.stats.get_value('movie_list').append(movieItem['movieRealName'])
         yield movieItem
         downList = response.css('#showinfo > table a::text').extract()
         for down_url in downList:

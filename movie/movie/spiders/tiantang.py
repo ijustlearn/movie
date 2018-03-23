@@ -2,6 +2,7 @@ import scrapy
 import re
 
 import singleton as singleton
+from scrapy.mail import MailSender
 
 from movie.items import ProMovieItem, ProMovieDownAddressItem
 from movie.mysql.pipelines import MoviePipeline
@@ -28,7 +29,16 @@ class Dy2018MovieScrapy(scrapy.Spider):
             print("全量抓取电影")
         else:
             print("增量抓取电影")
+    def closed(self,reason):
+        #爬取完成后进行邮件通知
+        mailer = MailSender.from_settings(self.settings)
+        body = '''本次爬取状态:{}\r\n本次爬取电影数量:{}\r\n本次爬取电影列表:{}'''.format(reason,self.crawler.stats.get_value('movie_count'),
+                                                                    self.crawler.stats.get_value('movie_list'))
+        subject = '天堂网电影爬取通知'
+        mailer.send(to=["477915244@qq.com"], subject=subject, body=body)
     def start_requests(self):
+        self.crawler.stats.set_value('movie_list', [])
+        self.crawler.stats.set_value('movie_count', 0)
         yield Request("https://www.dy2018.com/html/gndy/dyzz/", callback=self.parse0)
     def parse0(self, response):
 
@@ -107,6 +117,8 @@ class Dy2018MovieScrapy(scrapy.Spider):
         #如果已经有当前页面的电影链接存储过则直接退出
         if moviePipelin.movieLinkIsRepeat(movieItem['sourcePageUrl'],movieItem['source']):
             return
+        self.crawler.stats.inc_value('movie_count')
+        self.crawler.stats.get_value('movie_list').append(movieItem['movieRealName'])
         yield movieItem
         for downAdrressUrlInfo in downAdrressesUrl:
             downAdrressItem = ProMovieDownAddressItem()
