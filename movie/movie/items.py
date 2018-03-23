@@ -21,6 +21,7 @@ class ProMovieItem(scrapy.Item):
     source = scrapy.Field() #是否启用
     sourcePageUrl = scrapy.Field() #是否启用
     updateDate = scrapy.Field() #更新日期
+    score = scrapy.Field() #豆瓣评分
 
 
 class ProMovieDownAddressItem(scrapy.Item):

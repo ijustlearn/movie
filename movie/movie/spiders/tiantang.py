@@ -16,6 +16,7 @@ class Dy2018MovieScrapy(scrapy.Spider):
     baseUrl = "https://www.dy2018.com"
     allowed_domains  = ["dy2018.com"]
     is_inc = 'true'
+    scrapy_date = datetime.datetime.now()  #从哪天抓取数据默认当天
     # start_urls = [
     #     # "https://www.dy2018.com/i/99150.html"
     #     "https://www.dy2018.com/html/gndy/dyzz/"
@@ -38,10 +39,9 @@ class Dy2018MovieScrapy(scrapy.Spider):
             tmpStrlist1 = infoStr.split(" ")
             tmpStrlist2 = tmpStrlist1[0].split("：")
             updateDate = datetime.datetime.strptime(tmpStrlist2[1],'%Y-%m-%d')
-            #today = datetime.datetime.now()
-            today = datetime.datetime.strptime('2018-03-11','%Y-%m-%d')
+
             #如果是当前日期或者是全量则进行解析
-            if today.date() == updateDate.date() or  self.is_inc == 'false':
+            if self.scrapy_date.date() <= updateDate.date() or  self.is_inc == 'false':
                 movielink = movieTable.css('a::attr(href)').extract_first()
                 currentUrl = self.baseUrl+movielink
                 yield Request(currentUrl,callback=self.parse1)
@@ -82,13 +82,13 @@ class Dy2018MovieScrapy(scrapy.Spider):
         for p in pList:
             nameMatch = re.match('◎译　　名(.*)', p)
             realNameMatch = re.match('◎片　　名(.*)', p)
-            movieYearMatch = re.match('◎年　　代(.*)', p)
+            movieYearMatch = re.match('◎年　　份(.*)', p) if re.match('◎年　　份(.*)', p) else re.match('◎年　　代(.*)', p)
             if nameMatch:
-                movieItem['movieName'] = nameMatch.group(1)
+                movieItem['movieName'] = nameMatch.group(1).strip()
             if realNameMatch:
-                movieItem['movieRealName'] = realNameMatch.group(1)
+                movieItem['movieRealName'] = realNameMatch.group(1).strip()
             if movieYearMatch:
-                movieItem['movieYear'] = movieYearMatch.group(1)
+                movieItem['movieYear'] = movieYearMatch.group(1).strip()
             if re.match('◎影片截图', p):
                 beginDescr = False
             if beginDescr  == True:

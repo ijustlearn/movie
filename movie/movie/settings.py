@@ -96,3 +96,5 @@ MYSQL_USER = 'root'
 MYSQL_PASSWORD = 'root'
 #是否增量
 IS_INC = True
+
+#DUPEFILTER_CLASS  = 'movie.utils.seenURLFilter.SeenURLFilter'

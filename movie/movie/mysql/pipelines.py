@@ -27,8 +27,8 @@ class MoviePipeline():
             try:
                 item.setdefault('createTime',CommoneUtils.current_milli_time())
                 item.setdefault('enable','Y')
-                self.cursor.execute("""insert into pro_movie (id,movie_name,movie_descr,movie_img_url,movie_year,movie_real_name,create_time,enable,source,source_page_url,update_date) VALUE (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
-                                    (item['id'],item['movieName'],item['movieDescr'],item['movieImgUrl'],item['movieYear'],item['movieRealName'],item['createTime'],item['enable'],item['source'],item['sourcePageUrl'],item['updateDate'],))
+                self.cursor.execute("""insert into pro_movie (id,movie_name,movie_descr,movie_img_url,movie_year,movie_real_name,create_time,enable,source,source_page_url,update_date,score) VALUE (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
+                                    (item['id'],item['movieName'],item['movieDescr'],item['movieImgUrl'],item['movieYear'],item['movieRealName'],item['createTime'],item['enable'],item['source'],item['sourcePageUrl'],item['updateDate'],item.get("score",''),))
                 #print("""insert into pro_movie (id,movie_name,movie_descr,movie_img_url,movie_year,movie_real_name,create_time,enable) VALUE ({},{},{},{},{},{},{},%s)""".format(item['id'],item['movieName'],item['movieDescr'],item['movieImgUrl'],item['movieYear'],item['movieRealName'],item['createTime'],item['enable']))
                 self.connect.commit()
             except Exception as e :
