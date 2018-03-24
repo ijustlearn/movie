@@ -1,12 +1,10 @@
 import scrapy
 import re
 
-import singleton as singleton
 from scrapy.mail import MailSender
 
 from movie.items import ProMovieItem, ProMovieDownAddressItem
 from movie.mysql.pipelines import MoviePipeline
-from movie.settings import IS_INC
 from movie.utils.commoneUtils import CommoneUtils
 from scrapy import Request
 from scrapy import  log
