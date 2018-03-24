@@ -20,3 +20,5 @@
 ## 报错解决：
 1. 报错  Invalid environment marker: python_version < '3' 请使用 `pip3 install  -r requirements.txt`
 2. 报错 twisted/test/raiser.c:4:20: fatal error: Python.h: No such file or directory  参考https://stackoverflow.com/questions/43047284/how-to-install-python3-devel-on-red-hat-7 安装 python3-devel
+## 其他：
+本爬虫严禁用于任何商业用途，如果好用请star，谢谢~
