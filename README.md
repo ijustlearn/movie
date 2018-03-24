@@ -13,7 +13,7 @@
 6. 部署到linux系统请把pywin32==223 从 requirements.txt中去掉（这个包是用于windows开发时debug用的）
 7. `pip install -r requirements.txt`
 8. `wim settings`文件,配置sql地址,以及邮件发送地址
-9. mysql新增movie库字符集选择utf-8, 然后自行mvoie.sql脚本
+9. mysql新增movie库字符集选择utf-8, 然后执行mvoie.sql脚本
 9. `scrapy crawl piaohua -a is_inc=true` #爬取飘花网is_inc=true增量爬取，false全量爬取 
 10. `scrapy crawl dy2018 -a is_inc=true` #爬取电影天堂网is_inc=true增量爬取，false全量爬
 ----
