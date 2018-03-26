@@ -57,10 +57,12 @@ class piaohuaMovieScrapy(scrapy.Spider):
             # if pageUrl not in scrapyedUrls: 使用系统url去重
             yield Request(currentUrl+pageUrl,callback=self.parse2)
     def parse0(self,response):
-        movieList = response.css("div.bunews > ul > li")
+        movieList = response.css("#im li")
         for movie in movieList:
             updateDateStr = movie.css('span::text').extract_first()
+            if updateDateStr == None : updateDateStr = movie.css('font::text').extract_first()
             if updateDateStr == None : continue
+            print(updateDateStr)
             updateDate = datetime.datetime.strptime(updateDateStr, '%Y-%m-%d')
             #如果更新时间大于抓取时间 或者全量抓取 则进行页面抓取
             if updateDate.date() >= self.scrapy_date.date() or self.is_inc == 'false':
