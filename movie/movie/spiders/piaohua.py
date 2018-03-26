@@ -62,7 +62,6 @@ class piaohuaMovieScrapy(scrapy.Spider):
             updateDateStr = movie.css('span::text').extract_first()
             if updateDateStr == None : updateDateStr = movie.css('font::text').extract_first()
             if updateDateStr == None : continue
-            print(updateDateStr)
             updateDate = datetime.datetime.strptime(updateDateStr, '%Y-%m-%d')
             #如果更新时间大于抓取时间 或者全量抓取 则进行页面抓取
             if updateDate.date() >= self.scrapy_date.date() or self.is_inc == 'false':
