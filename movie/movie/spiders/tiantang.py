@@ -15,7 +15,8 @@ class Dy2018MovieScrapy(scrapy.Spider):
     baseUrl = "https://www.dy2018.com"
     allowed_domains  = ["dy2018.com"]
     is_inc = 'true'
-    scrapy_date = datetime.datetime.now()  #从哪天抓取数据默认当天
+    #scrapy_date = datetime.datetime.now()  #从哪天抓取数据默认当天
+    scrapy_date = datetime.datetime.strptime('2018-03-27', '%Y-%m-%d')
     # start_urls = [
     #     # "https://www.dy2018.com/i/99150.html"
     #     "https://www.dy2018.com/html/gndy/dyzz/"
@@ -27,6 +28,7 @@ class Dy2018MovieScrapy(scrapy.Spider):
             print("全量抓取电影")
         else:
             print("增量抓取电影")
+            print("抓取日期：{}的电影".format(self.scrapy_date.strftime("%Y-%m-%d")))
     def closed(self,reason):
         #爬取完成后进行邮件通知
         mailer = MailSender.from_settings(self.settings)
@@ -44,10 +46,9 @@ class Dy2018MovieScrapy(scrapy.Spider):
         movieList = response.css('.co_content8 > ul  table  ')
         for movieTable in movieList:
             infoStr =  movieTable.css('font[color="#8F8C89"]::text').extract_first() # 日期：2018-03-11 点击：77534
-            tmpStrlist1 = infoStr.split(" ")
+            tmpStrlist1 = infoStr.split("\n")
             tmpStrlist2 = tmpStrlist1[0].split("：")
-            updateDate = datetime.datetime.strptime(tmpStrlist2[1],'%Y-%m-%d')
-
+            updateDate = datetime.datetime.strptime(tmpStrlist2[1].strip(),'%Y-%m-%d')
             #如果是当前日期或者是全量则进行解析
             if self.scrapy_date.date() <= updateDate.date() or  self.is_inc == 'false':
                 movielink = movieTable.css('a::attr(href)').extract_first()

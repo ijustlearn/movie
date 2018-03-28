@@ -16,7 +16,7 @@ class piaohuaMovieScrapy(scrapy.Spider):
     allowed_domains  = ["piaohua.com"]
     is_inc = 'true'
     scrapy_date = datetime.datetime.now()  # 从哪天抓取数据默认当天
-    # scrapy_date = datetime.datetime.strptime('2018-03-10', '%Y-%m-%d')
+    #scrapy_date = datetime.datetime.strptime('2018-03-27', '%Y-%m-%d')
     def __init__(self,is_inc='true' ,*args,**kwargs):
         super(piaohuaMovieScrapy, self).__init__(*args, **kwargs)
         self.is_inc = is_inc
@@ -24,6 +24,7 @@ class piaohuaMovieScrapy(scrapy.Spider):
             print("全量抓取电影")
         else:
             print("增量抓取电影")
+            print("抓取日期：{}的电影".format(self.scrapy_date.strftime("%Y-%m-%d")))
     def closed(self,reason):
         #爬取完成后进行邮件通知
         mailer = MailSender.from_settings(self.settings)
