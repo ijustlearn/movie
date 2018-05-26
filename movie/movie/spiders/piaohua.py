@@ -86,8 +86,10 @@ class piaohuaMovieScrapy(scrapy.Spider):
             print(e)
             movieItem['updateDate'] = datetime.datetime.now().timestamp()
             log.msg("电影地址:{}发布日期解析不到默认使用当前日期".format(response.url))
-
-        movieItem['movieImgUrl'] = response.css('#showinfo > img::attr(src)').extract_first()
+        movieImgUrl = response.css('#showinfo > img::attr(src)').extract_first()
+        if movieImgUrl.find('/') == 0 :
+            movieImgUrl = self.baseUrl+movieImgUrl
+        movieItem['movieImgUrl'] = movieImgUrl
         # movieItem['movieName'] = response.css('#show > h3::text').extract_first()
         movieItem['movieDescr'] = ''
         infolist =  response.css('#showinfo > div::text').extract()
