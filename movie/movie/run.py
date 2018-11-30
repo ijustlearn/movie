@@ -6,7 +6,7 @@
 from scrapy import cmdline
 
 
-name = 'dy2018'
+name = 'piaohua'
 is_inc  = 'true'
-cmd = 'scrapy crawl {0} -a is_inc={1}'.format(name,is_inc)
+cmd = 'scrapy crawl {0} -a is_inc={1} -s LOG_FILE=spider.log'.format(name,is_inc)
 cmdline.execute(cmd.split())

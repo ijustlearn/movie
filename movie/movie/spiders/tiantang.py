@@ -15,8 +15,8 @@ class Dy2018MovieScrapy(scrapy.Spider):
     baseUrl = "https://www.dy2018.com"
     allowed_domains  = ["dy2018.com"]
     is_inc = 'true'
-    #scrapy_date = datetime.datetime.now()  #从哪天抓取数据默认当天
-    scrapy_date = datetime.datetime.strptime('2018-03-27', '%Y-%m-%d')
+    scrapy_date = datetime.datetime.now()  #从哪天抓取数据默认当天
+    # scrapy_date = datetime.datetime.strptime('2018-03-27', '%Y-%m-%d')
     # start_urls = [
     #     # "https://www.dy2018.com/i/99150.html"
     #     "https://www.dy2018.com/html/gndy/dyzz/"
