@@ -18,7 +18,7 @@ PyMySQL==0.8.0
 pyOpenSSL==17.5.0
 pywin32==223
 queuelib==1.4.2
-Scrapy==1.5.0
+Scrapy==1.8.2
 service-identity==17.0.0
 six==1.11.0
 Twisted==17.9.0
